@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Runs `protonvpn signin` inside the terminal the panel opens (the CLI only
+# takes a password from a tty). Unlike a bare command, it keeps the terminal
+# open when sign-in fails, so the CLI's own error message can be read.
+#
+# usage: ryoproton-signin <lockfile> <totp:0|1> [username]
+#   totp=1 passes --totp (authenticator-app code instead of a security key).
+set -u
+lock=${1:?lock file}
+totp=${2:-1}
+user=${3:-}
+
+if [ -z "$user" ]; then
+	read -rp 'Proton username: ' user
+fi
+case "$user" in
+	"" | -*) echo "Invalid username."; read -rp 'Press Enter to close ' _; exit 2 ;;
+esac
+
+args=(signin)
+[ "$totp" = "1" ] && args+=(--totp)
+args+=("$user")
+
+flock "$lock" protonvpn "${args[@]}"
+rc=$?
+echo
+if [ "$rc" -ne 0 ]; then
+	echo "Sign-in failed (exit code $rc). The message above comes from the Proton VPN CLI."
+	read -rp 'Press Enter to close ' _
+else
+	sleep 1
+fi
+exit "$rc"

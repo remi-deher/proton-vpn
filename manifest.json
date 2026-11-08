@@ -1,0 +1,124 @@
+{
+  "id": "proton-vpn",
+  "name": "Proton VPN",
+  "version": "0.1.0",
+  "author": "Rémi DEHER <56632525+remi-deher@users.noreply.github.com>",
+  "description": "Proton VPN in the Ryoku bar: world map of cities, one-click connect, quick connect (Fastest, Random, P2P, Secure Core, Tor), Kill Switch, NetShield, port forwarding and live traffic. Port of OmaProton VPN.",
+  "license": "MIT",
+  "official": false,
+  "hosts": [
+    "topbarGlyph"
+  ],
+  "entryPoints": {
+    "main": "service/Main.qml",
+    "content": "content/Widget.qml",
+    "panel": "content/Panel.qml"
+  },
+  "panel": {
+    "width": 380
+  },
+  "files": [
+    "bin/ryoproton-signin",
+    "service/Model.js",
+    "content/ProtonIcon.qml",
+    "content/WorldMap.qml",
+    "content/Traffic.qml",
+    "content/World.js",
+    "service/I18n.js",
+    "service/servers.py",
+    "service/apps.py",
+    "service/port.py"
+  ],
+  "capabilities": {
+    "densities": [
+      "glyph",
+      "compact"
+    ],
+    "privileged": [
+      "pkexec pacman -S --needed --noconfirm proton-vpn-cli"
+    ]
+  },
+  "defaults": {
+    "host": "topbarGlyph",
+    "label": "Proton VPN"
+  },
+  "dependencies": {
+    "commands": [
+      "protonvpn",
+      "nmcli",
+      "python3",
+      "flock",
+      "busctl",
+      "ryoku-app",
+      "pkexec",
+      "pacman",
+      "install",
+      "cat",
+      "which"
+    ],
+    "packages": [
+      "proton-vpn-cli",
+      "networkmanager"
+    ]
+  },
+  "metadata": {
+    "settings": [
+      {
+        "key": "watchIntervalSec",
+        "type": "int",
+        "label": "Link watch interval (seconds)",
+        "group": "Proton VPN",
+        "default": 4,
+        "min": 2,
+        "max": 60,
+        "step": 1
+      },
+      {
+        "key": "notifications",
+        "type": "choice",
+        "label": "Desktop notifications",
+        "group": "Proton VPN",
+        "default": "on",
+        "options": [
+          {
+            "value": "on",
+            "label": "On"
+          },
+          {
+            "value": "off",
+            "label": "Off"
+          }
+        ]
+      },
+      {
+        "key": "signinTotp",
+        "type": "toggle",
+        "label": "Sign in with an authenticator code (off = security key)",
+        "group": "Proton VPN",
+        "default": true
+      },
+      {
+        "key": "language",
+        "type": "choice",
+        "label": "Language",
+        "group": "Proton VPN",
+        "default": "auto",
+        "options": [
+          {
+            "value": "auto",
+            "label": "Automatic"
+          },
+          {
+            "value": "fr",
+            "label": "Français"
+          },
+          {
+            "value": "en",
+            "label": "English"
+          }
+        ]
+      }
+    ]
+  },
+  "status": "experimental"
+}
